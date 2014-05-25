@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="bootstrap.min.css" rel="stylesheet">
+
+	<script src="../validpass.js"></script>
+	<link rel="stylesheet" href="../validpass.css" type="text/css" />
+	<style>
+		pre { font-size: 10px; }
+		.green { background-color: #dff0d8; }
+	</style>
+</head>
+<body>
+	<div class="jumbotron green">
+      <div class="container">
+        <h1>validpass.js</h1>
+        <p>Password validation for a sign-up page: help your users choose a secure password.</p>
+      </div>
+	  
+    </div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+			  <h2>Simple</h2>
+			  <p>Only 2k minified. No dependencies. Cross browser, IE8+.</p>
+			  <p><strong>Add the script...</strong><br/>
+				<pre style="font-size: 10px;">&lt;script src="validpass.js"&gt;&lt;/script&gt;</pre>
+			  </p>
+			  <p>
+				<strong>...and the HTML</strong><br/>
+				
+				<pre style="font-size: 10px;">&lt;input type="password" data-vp-list="resultslist"/&gt;
+				   
+&lt;ul id="resultslist"&gt;
+  &lt;li data-vp-rule="minchars"&gt;At least 8 characters long.&lt;/li&gt;
+  &lt;li data-vp-rule="uppercase"&gt;Contains uppercase letters.&lt;/li&gt;
+  &lt;li data-vp-rule="numbers"&gt;Contains numbers.&lt;/li&gt;
+  &lt;li data-vp-rule="punctuation"&gt;Contains punctuation.&lt;/li&gt;
+&lt;/ul&gt;</pre>
+			  </p>
+			  <p>
+				<strong>And an optional CSS file</strong>
+				<pre style="font-size:10px">&lt;link rel="stylesheet" href="validpass.css" type="text/css" /&gt;</pre>
+			  </p>
+			</div>
+			<div class="col-md-4">
+			  <h2>Customisable</h2>
+			  
+			  <p>Callbacks:</p>
+			  
+			  <pre>window.ValidPass.Instances[0].registerCallback(
+	function(result, passes, failures){
+		//...
+	});</pre>
+			  <p>Create custom rules:</p>
+
+			  <pre style="font-size:10px;">window.ValidPass.RuleDefinitions.IsEqualToBob = function(attrs){
+	return function(value) {
+		return value === "Bob";
+	};
+};</pre>		  
+			  <p>Use for any type of validation, detached from the DOM:</p>
+			  
+		<pre>var ctrl = new window.ValidPass.Runner(['IsEqualToBob']);
+ctrl.run("bob");</pre>
+			  
+		   </div>
+			<div class="col-md-4">
+				<h2>Demo</h2>
+				
+				<input placeholder="Enter your new password" type="password" id="password" name="password" 
+						data-vp-list="resultslist" 
+						data-vp-applyclass-to = "valid,invalid"
+						data-vp-applyclass-name = "show,hidden"/>
+						
+				<ul id="resultslist">
+				  <li data-vp-rule="minchars" data-vp-minchars="8">At least 8 characters long.</li>
+				  <li data-vp-rule="uppercase">Contains uppercase letters.</li>
+				  <li data-vp-rule="numbers">Contains numbers.</li>
+				  <li data-vp-rule="punctuation">Contains punctuation.</li>
+				</ul>
+				
+				<div style="margin: 24px;">
+					<p id="invalid" class="bg-danger" style="padding:10px">
+						Your password must match the above rules.
+					</p>				
+					<p id="valid" class="bg-success" style="display:none;padding:10px">
+						Your chosen password is valid :-)
+					</p>
+				</div>
+			</div>
+		</div>
+		
+		<hr/>
+		<div class="row">
+			<div class="col-md-4">
+				<h2>Example: Showing/hiding a label</h2>
+				<p>
+				This is the full code required for the demo shown above.
+				</p>
+			</div>
+			<div class="col-md-8">
+			<pre>&lt;input placeholder="Enter your new password" type="password" id="password" name="password" 
+			data-vp-list="resultslist" 
+			data-vp-applyclass-to = "valid,invalid"
+			data-vp-applyclass-name = "show,hidden"/&gt;
+			
+&lt;ul id="resultslist"&gt;
+	&lt;li data-vp-rule="minchars" data-vp-minchars="8"&gt;At least 8 characters long.&lt;/li&gt;
+	&lt;li data-vp-rule="uppercase"&gt;Contains uppercase letters.&lt;/li&gt;
+	&lt;li data-vp-rule="numbers"&gt;Contains numbers.&lt;/li&gt;
+	&lt;li data-vp-rule="punctuation"&gt;Contains punctuation.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p id="invalid"&gt;Your password must match the above rules.&lt;/p&gt;
+&lt;p id="valid" style="display:none;"&gt;Your chosen password is valid :-)&lt;/p&gt;
+</pre>
+			</div>
+		</div>
+		
+		<hr/>
+		<div class="row">
+			<div class="col-md-4">
+				<h2>Changing settings</h2>
+				<p>
+				There are various configuration options that you can set.
+				</p>
+			</div>
+			<div class="col-md-8">
+				<p>
+					<strong>className</strong><br>
+					This sets the class name that is applied to <code>li</code> elements when the corresponding rule is valid. eg:
+					<pre>window.ValidPass.className = 'complete';</pre>
+				</p>
+				<p>
+					<strong>minChars</strong><br>
+					This changes the default minimum length when you're using the <code>minChars</code> rule. It's default value is 8. This setting is always overridden by using the <code>data-vp-minchars</code> attribute, though.
+					<pre>window.ValidPass.minChars = 8;</pre>
+				</p>
+				<p>
+					<strong>minWords</strong><br>
+					This changes the default minimum number of words when you're using the <code>minWords</code> rule. It's default value is 4. This setting is always overridden by using the <code>data-vp-minwords</code> attribute, though.
+					<pre>window.ValidPass.minWords = 4;</pre>
+				</p>
+			</div>
+		</div>
+		
+		
+		<hr/>
+		<div class="row">
+			<div class="col-md-4">
+				<h2>Custom rules</h2>
+				<p>You can create custom rules in JavaScript, and then attach them to the form in markup.</p>
+				<p>You can even change existing rules, just modify the <code>window.ValidPass.RuleDefinitions</code> object.
+			</div>
+			<div class="col-md-8">
+				
+				<pre>&lt;script&gt;
+	//Define a new custom rule to check for reserved passwords
+	window.ValidPass.RuleDefinitions.reserved = function(attrs){
+		return function(value) {
+			//Check the password isn't one of a few reserved words
+			var reservedWords = ["password", "p@ssword", "oranges"];
+			return reservedWords.indexOf(value.toLowerCase()) === -1;
+		};
+	};
+&lt;/script&gt;
+
+&lt;input placeholder="Enter your new password" type="password" data-vp-list="resultslist" /&gt;
+&lt;ul id="resultslist"&gt;
+	&lt;li data-vp-rule="reserved"&gt;You can't use a reserved word.&lt;/li&gt;
+&lt;/ul&gt;</pre>
+
+		<p>You can create rules that use attributes from the <code>li</code> element:</p>
+		<pre>&lt;script&gt;	
+window.ValidPass.RuleDefinitions.IsEqualToValAttribute = function(attrs){
+	return function(value) {
+		return value === attrs['data-val'];
+	};
+};
+&lt;/script&gt;</pre>
+		
+		<p>Then use the rule in markup as follows:</p>
+<pre>
+&lt;li data-vp-rule="IsEqualToValAttribute" data-val="Bob"&gt;Should be equal to Bob.&lt;/li&gt;
+</pre>
+
+			</div>
+		</div>
+		
+		
+		
+		<hr/>
+		
+		<div class="row">
+			<div class="col-md-4">
+				<h2>Register a callback in markup</h2>
+				<p>In addition to using the <code>registerCallback</code> call in JavaScript, you can attach a callback by specifying the name of a global javascript method within your markup.</p>
+			</div>
+			<div class="col-md-8">
+				
+				
+				<pre>&lt;input placeholder="Enter your new password" type="password" id="password" name="password" 
+		data-vp-callback="callme"
+		data-vp-list="resultslist" /&gt;
+		
+&lt;ul id="resultslist"&gt;
+	&lt;li data-vp-rule="minwords" data-vp-minwords="4"&gt;Contains four distinct words.&lt;/li&gt;
+	&lt;li data-vp-rule="minchars" data-vp-minchars="20"&gt;At least 20 characters long.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script&gt;
+	function callme(result, passes, fails){
+		alert("hello");
+	}
+&lt;/script&gt;</pre>
+				
+			</div>
+		</div>
+		
+		<hr/>
+		<div class="row">
+			<div class="col-md-4">
+				<h2>'XKCD' Validation</h2>
+				<p>
+				Traditional passwords aren't as secure as a few simple, random words.
+				</p>
+				<p>
+				Check out the classic XKCD comic!
+				</p>
+				<input placeholder="Enter your new password" type="password" id="password" name="password" 
+						data-vp-list="resultslist-xkcd" 
+						data-vp-applyclass-to = "valid-xkcd,invalid-xkcd"
+						data-vp-applyclass-name = "show,hidden"
+				/>
+				<ul id="resultslist-xkcd">
+				  <li data-vp-rule="minwords" data-vp-minwords="4">Contains four distinct words.</li>
+				  <li data-vp-rule="minchars" data-vp-minchars="20">At least 20 characters long.</li>
+				</ul>
+				
+				<div style="margin: 24px;">
+					<p id="invalid-xkcd" class="bg-danger" style="padding:10px">
+						Your password must match the above rules.
+					</p>
+					<p id="valid-xkcd" class="bg-success" style="display:none;padding:10px">
+						Your chosen password is valid :-)
+					</p>
+				</div>
+				
+				<p>
+				This example just uses the 'minwords' rule and the 'minchars' rule in combination.
+				</p>
+			</div>
+			<div class="col-md-8">
+				<img src="http://imgs.xkcd.com/comics/password_strength.png"/>
+			</div>
+		</div>
+		
+		
+		<hr/>
+		<div class="row">
+			<div class="col-md-4">
+				<h2>JS-only validation</h2>
+				<p>
+				You can use this library to perform validation in code-only. This means you can use your own custom UI.
+				</p>
+			</div>
+			<div class="col-md-8">
+				<pre>&lt;script&gt;
+//Define any custom rules
+window.ValidPass.RuleDefinitions.IsEqualToBob = function(attrs){
+	return function(value) {
+		return value === "Bob";
+	};
+};
+
+//Instantiate the validator
+var validator = new window.ValidPass.Runner(['IsEqualToBob', 'minchars']);
+
+//List for callbacks
+validator.registerCallback(function(result, passes, failures){
+	//result: boolean
+	//passes: array of rules that passed
+	//failures: array of rules that failed
+});
+
+validator.run("bob");
+&lt;/script&gt;</pre>
+
+<p>You can alternatively instantiate the validator more explicitly by specifying options for each rule:</p>
+<pre>&lt;script&gt;
+window.ValidPass.RuleDefinitions.IsEqualToValAttribute = function(attrs){
+	return function(value) {
+		return value === attrs['val'];
+	};
+};
+
+var ctrl = new window.ValidPass.Runner([new window.ValidPass.Rule("IsEqualToValAttribute", {"val": 'bob'})]);
+ctrl.run("bob");
+&lt;/script&gt;</pre>
+
+<p>Also, you can optionally specify an input element that will be automatically responded to:</p>
+
+<pre>&lt;script&gt;
+	var input = document.getElementById('inputelem');
+	var validator = new window.ValidPass.Runner(input, ['IsEqualToBob', 'minchars']);
+&lt;/script&gt;</pre>
+			</div>
+		</div>
+		
+		<hr/>
+		<div class="row">
+			<div class="col-md-4">
+				<h2>Notes</h2>
+				<p>
+				
+				</p>
+			</div>
+			<div class="col-md-8">
+			
+				<h4>Thanks To</h4>
+				<p>Paul Lewis for inspiration. Also the design including the little green tick images. Check out his <a href="http://aerotwist.com/blog/better-password-form-fields">original blog post</a>.</p>
+			
+			
+				<h4>Browser Support</h4>
+				<p>Although validpass.js supports version Internet Explorer 8+, you can support earlier versions easily by polyfilling <code>document.querySelectorAll</code> with <strong>jQuery </strong> or something.</p>
+				
+				
+			</div>
+		</div>
+		
+		
+		<hr/>
+		
+		
+    </div>
+	
+	<footer>
+        <p></p>
+     </footer>
+</body>
+</html>
